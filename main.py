@@ -2,7 +2,6 @@
 import random
 import re
 from astrbot.api.star import Star
-from astrbot.core.message import At
 
 class OttoPersonality(Star):
     def __init__(self):
@@ -94,25 +93,24 @@ class OttoPersonality(Star):
             await self.send_otto_quote(event)
             return
 
-        # 被@触发
-        if event.message_chain.has(At):
-            for at in event.message_chain.get(At):
-                if at.target == self.bot_id:
-                    await self.handle_mention(event)
-                    return
+        # 检查是否被@机器人
+        for seg in event.message_chain:
+            if getattr(seg, "type", None) == "at" and getattr(seg, "target", None) == self.bot_id:
+                await self.handle_mention(event)
+                return
 
-        # 关键词匹配
-        for pattern, responses in self.keyword_responses.items():
-            if re.search(pattern, msg, re.IGNORECASE):
+        # 关键词触发
+        for pattern, replies in self.keyword_responses.items():
+            if re.search(pattern, msg):
                 if random.random() < 0.6:
-                    await event.reply(random.choice(responses))
+                    await event.reply(random.choice(replies))
                     return
 
-        # 游戏相关匹配
-        for pattern, responses in self.game_responses.items():
+        # 游戏相关触发
+        for pattern, replies in self.game_responses.items():
             if pattern.lower() in msg:
                 if random.random() < 0.6:
-                    await event.reply(random.choice(responses))
+                    await event.reply(random.choice(replies))
                     return
 
         # 指令处理
