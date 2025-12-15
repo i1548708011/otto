@@ -4,13 +4,14 @@ import re
 from astrbot.api.star import Star
 
 class OttoPersonality(Star):
-    def __init__(self):
+    def __init__(self, context):
         super().__init__(
             name="otto",
             author="吉吉国民",
             version="1.0.0",
             desc="Otto人格插件（电棍行为向）"
         )
+        self.context = context  # 保存 context 给需要的地方使用
 
         # Otto经典语录库
         self.otto_quotes = [
@@ -84,16 +85,15 @@ class OttoPersonality(Star):
             return
         msg = msg.lower()
 
-        # 只处理群消息
         if not hasattr(event, "group") or event.group is None:
             return
 
-        # 5%概率随机发送Otto语录
+        # 5%随机语录
         if random.random() < 0.05:
             await self.send_otto_quote(event)
             return
 
-        # 检查是否被@机器人
+        # 被@触发
         for seg in event.message_chain:
             if getattr(seg, "type", None) == "at" and getattr(seg, "target", None) == self.bot_id:
                 await self.handle_mention(event)
@@ -113,7 +113,7 @@ class OttoPersonality(Star):
                     await event.reply(random.choice(replies))
                     return
 
-        # 指令处理
+        # 指令
         await self.handle_commands(event, msg)
 
     async def handle_mention(self, event):
@@ -126,8 +126,7 @@ class OttoPersonality(Star):
         await event.reply(random.choice(responses))
 
     async def send_otto_quote(self, event):
-        quote = random.choice(self.otto_quotes)
-        await event.reply(quote)
+        await event.reply(random.choice(self.otto_quotes))
 
     async def handle_commands(self, event, msg):
         commands = {
