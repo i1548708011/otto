@@ -1,11 +1,11 @@
 # otto_plugin.py
 import random
 import re
-from datetime import datetime
-from astrbot.core import Plugin, MessageEvent, GroupMessageEvent, PrivateMessageEvent
-from astrbot.core.message import MessageChain, Plain, At
+from astrbot.api.star import Star
+from astrbot.api.event import MessageEvent, GroupMessageEvent, PrivateMessageEvent
+from astrbot.core.message import At
 
-class OttoPersonality(Plugin):
+class OttoPersonality(Star):
     def __init__(self):
         super().__init__()
         self.name = "Otto人格插件"
@@ -87,7 +87,7 @@ class OttoPersonality(Plugin):
             "翻盘": ["棍子哥的经典翻盘环节要来了！"]
         }
 
-    async def on_group_message(self, event: GroupMessageEvent):
+    async def on_group_message(self, event: MessageEvent):
         """处理群消息"""
         msg = event.message_chain.plain_text.lower()
         sender_id = event.sender.id
