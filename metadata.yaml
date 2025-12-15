@@ -1,6 +1,16 @@
-name: helloworld # 插件唯一识别名，以 astrbot_plugin_ 前缀开头
-display_name: helloworld # 用于展示的名字，可以是方便人类阅读的名字（需要版本 >= v4.5.0，低版本不会报错，请放心填写）
-desc: AstrBot 插件示例。 # 插件简短描述
-version: v1.3.0 # 插件版本号。格式：v1.1.1 或者 v1.1
-author: Soulter # 作者
-repo: https://github.com/Soulter/helloworld # 插件的仓库地址
+# config/otto_config.yaml
+otto_personality:
+  enabled: true
+  response_probability: 0.3  # 总体回复概率
+  cool_down: 5  # 冷却时间（秒）
+  
+  # 特殊功能设置
+  features:
+    auto_status: true  # 自动播报状态
+    game_assist: true  # 游戏相关建议
+    quote_of_day: true  # 每日语录
+  
+  # 自定义语录（可在此添加）
+  custom_quotes:
+    - "自定义语录1"
+    - "自定义语录2"
